@@ -1,5 +1,9 @@
 package com.applications.whazzup.mvpapplication.ui.activities;
 
+import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -7,18 +11,21 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.applications.whazzup.mvpapplication.BuildConfig;
 import com.applications.whazzup.mvpapplication.R;
 import com.applications.whazzup.mvpapplication.mvp.presenters.AuthPresenter;
 import com.applications.whazzup.mvpapplication.mvp.presenters.IAuthPresenter;
 import com.applications.whazzup.mvpapplication.mvp.views.IAuthView;
+import com.applications.whazzup.mvpapplication.ui.custom_view.AuthPanel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RootActivity extends AppCompatActivity implements IAuthView, View.OnClickListener {
     AuthPresenter mAuthPresenter = AuthPresenter.getOurInstance();
+    ProgressDialog mProgressDialog;
 
     @BindView(R.id.coordinator_container)
     CoordinatorLayout mCoordinatorLayout;
@@ -26,13 +33,16 @@ public class RootActivity extends AppCompatActivity implements IAuthView, View.O
     @BindView(R.id.login_btn)
     Button mLoginButton;
 
-    @BindView(R.id.auth_card)
-    CardView mAuthCard;
+    @BindView(R.id.auth_wrapper)
+    AuthPanel mAutPanel;
 
     @BindView(R.id.show_catalog_btn)
     Button mShowCatalog;
 
-    //regino ===============Life Cycle=====================
+    @BindView(R.id.app_name_txt)
+    TextView mAppName;
+
+    //region ===============Life Cycle=====================
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +51,9 @@ public class RootActivity extends AppCompatActivity implements IAuthView, View.O
         mAuthPresenter.takeView(this);
         mAuthPresenter.initView();
 
+        Typeface CF = Typeface.createFromAsset(getAssets(), "fonts/PTBebasNeueRegular.ttf");
+        mAppName.setTypeface(CF);
+        mProgressDialog = new ProgressDialog(this, R.style.custom_dialog);
         mLoginButton.setOnClickListener(this);
         mShowCatalog.setOnClickListener(this);
     }
@@ -51,7 +64,7 @@ public class RootActivity extends AppCompatActivity implements IAuthView, View.O
         super.onDestroy();
     }
 
-    //endregion
+    //end region
 
 
     @Override
@@ -73,12 +86,23 @@ public class RootActivity extends AppCompatActivity implements IAuthView, View.O
     @Override
     public void showLoad() {
         // TODO: 20.10.2016 Показать загрузчик
-
+        if(mProgressDialog == null){
+            mProgressDialog = new ProgressDialog(this, R.style.custom_dialog);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            mProgressDialog.show();
+            mProgressDialog.setContentView(R.layout.dialog_splash);
+        }
+        else{
+            mProgressDialog.show();
+            mProgressDialog.setContentView(R.layout.dialog_splash);
+        }
     }
 
     @Override
     public void hideLoad() {
         // TODO: 20.10.2016 Скрыть загрузчик
+        mProgressDialog.hide();
 
     }
 
@@ -97,10 +121,25 @@ public class RootActivity extends AppCompatActivity implements IAuthView, View.O
     public void hideLoginBtn() {
 mLoginButton.setVisibility(View.GONE);
     }
-
+/*
     @Override
     public void testShowLoginCard() {
         mAuthCard.setVisibility(View.VISIBLE);
+    }
+*/
+    @Override
+    public AuthPanel getAuthPanel() {
+        return mAutPanel;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!mAutPanel.isIddle()){
+            mAutPanel.setCustomState(AuthPanel.IDDLE_STATE);
+        }else{
+            super.onBackPressed();
+        }
+
     }
 
     @Override

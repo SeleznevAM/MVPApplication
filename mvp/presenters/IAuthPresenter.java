@@ -25,4 +25,6 @@ public interface IAuthPresenter {
     void clickOnTwitter();
     void clickOnShowCatalog();
     boolean checkUserAuth();
+    boolean isValidateEmail(String s);
+    boolean isValidatePassword(String s);
 }
