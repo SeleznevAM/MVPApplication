@@ -23,6 +23,6 @@ public class PreferencesManager {
     }
 
     public String getAuthToken() {
-        return mSharedPreferences.getString(ConstantManager.AUTH_TOKEN_KEY, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1NzY2ZDYxNjFkMzdhMDFjMDBlZTA2YWYiLCJmaXJzdF9uYW1lIjoi0JDQu9C10LrRgdCw0L3QtNGAIiwic2Vjb25kX25hbWUiOiLQodC10LvQtdC30L3QtdCyIiwicm9sZSI6InVzZXIiLCJpYXQiOjE0NzQxNDA4MTV9.gyImySgOhd6HvVGhBuDyPrrtdNa9NRzN_SMFV-8mPGg");
+        return mSharedPreferences.getString(ConstantManager.AUTH_TOKEN_KEY, "null");
     }
 }

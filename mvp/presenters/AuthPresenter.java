@@ -98,7 +98,7 @@ public class AuthPresenter implements IAuthPresenter {
     @Override
     public void clickOnShowCatalog() {
         if(getView()!=null){
-            getView().showMessage("Вы вошли в каталог");
+            getView().showCatalogScreen();
         }
 
     }

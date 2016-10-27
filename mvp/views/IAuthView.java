@@ -23,4 +23,6 @@ public interface IAuthView {
     //void testShowLoginCard();
     @Nullable
     AuthPanel getAuthPanel();
+
+    void showCatalogScreen();
 }
